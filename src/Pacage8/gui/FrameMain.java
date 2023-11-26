@@ -19,6 +19,8 @@ import java.util.Locale;
 
 
 public class FrameMain extends JFrame {
+    public static final String[] HEADERS = new String[]{"Фамилия", "Пол", "Курс", "Средний балл"};
+    public static final int COLUMN_WIDTH = 120;
     private JPanel panelMain;
     private JTable tableInput;
     private JButton buttonLoadInputFromFile;
@@ -27,6 +29,8 @@ public class FrameMain extends JFrame {
     private JButton buttonProgramExecution;
     private JButton buttonSaveOutputIntoFile;
     private JTable tableOutput;
+    private JTextField textFieldX;
+    private JTextField textFieldY;
 
     private JFileChooser fileChooserOpen;
     private JFileChooser fileChooserSave;
@@ -54,8 +58,8 @@ public class FrameMain extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
 
-        JTableUtils.initJTableForArray(tableInput, 40, true, true, true, true);
-        JTableUtils.initJTableForArray(tableOutput, 40, true, true, true, true);
+        JTableUtils.initJTableForArray(tableInput, 40, true, true, true, true, HEADERS);
+        JTableUtils.initJTableForArray(tableOutput, 40, true, true, true, true, HEADERS);
         //tableOutput.setEnabled(false);
         tableInput.setRowHeight(25);
         tableOutput.setRowHeight(25);
@@ -80,13 +84,14 @@ public class FrameMain extends JFrame {
         menuBarMain.add(menuLookAndFeel);
         SwingUtils.initLookAndFeelMenu(menuLookAndFeel);
 
-        JTableUtils.writeArrayToJTable(tableInput, new int[][]{
-                {0, 1, 2, 3, 4},
-                {5, 6, 7, 8, 9}
+        JTableUtils.writeArrayToJTable(tableInput, new String[][]{
+                {"Иванов", "М", "1", "3"}
         });
 
-        this.pack();
+        JTableUtils.resizeJTable(tableInput, 0, 4, 30, COLUMN_WIDTH);
+        JTableUtils.resizeJTable(tableOutput, 0, 4, 30, COLUMN_WIDTH);
 
+        this.pack();
 
         buttonLoadInputFromFile.addActionListener(new ActionListener() {
             @Override
@@ -203,13 +208,25 @@ public class FrameMain extends JFrame {
         tableOutput = new JTable();
         scrollPane2.setViewportView(tableOutput);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 6, new Insets(0, 0, 0, 0), -1, -1));
         panelMain.add(panel2, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonProgramExecution = new JButton();
         buttonProgramExecution.setText("Выполнить");
-        panel2.add(buttonProgramExecution, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(buttonProgramExecution, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        panel2.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel2.add(spacer2, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        label1.setText("X =");
+        panel2.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        textFieldX = new JTextField();
+        textFieldX.setText("3");
+        panel2.add(textFieldX, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        final JLabel label2 = new JLabel();
+        label2.setText("N =");
+        panel2.add(label2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        textFieldY = new JTextField();
+        textFieldY.setText("2");
+        panel2.add(textFieldY, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panelMain.add(panel3, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));

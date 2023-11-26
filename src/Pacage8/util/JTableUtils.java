@@ -13,12 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
@@ -173,6 +168,16 @@ public class JTableUtils {
         scrollPane.getRowHeader().getView().setBackground(scrollPane.getColumnHeader().getBackground());
     }
 
+    public static void initJTableForArray(
+            JTable table, int defaultColWidth,
+            boolean showRowsIndexes, boolean showColsIndexes,
+            boolean changeRowsCountButtons, boolean changeColsCountButtons,
+            int changeButtonsSize, int changeButtonsMargin
+    ) {
+        initJTableForArray(table, defaultColWidth, showRowsIndexes, showColsIndexes, changeRowsCountButtons,
+                changeColsCountButtons, changeButtonsSize, changeButtonsMargin, new String[]{});
+    }
+
     /**
      * Настройка JTable для работы с массивами
      * @param table компонент JTable
@@ -183,12 +188,14 @@ public class JTableUtils {
      * @param changeColsCountButtons добавить кнопки для добавления/удаления столбцов
      * @param changeButtonsSize размер кнопок для изменения количества строк и столбцов
      * @param changeButtonsMargin отступ кнопок от таблицы (а также расстояние между кнопками)
+     * @param customHeaders заголовки таблицы
      */
     public static void initJTableForArray(
         JTable table, int defaultColWidth,
         boolean showRowsIndexes, boolean showColsIndexes,
         boolean changeRowsCountButtons, boolean changeColsCountButtons,
-        int changeButtonsSize, int changeButtonsMargin
+        int changeButtonsSize, int changeButtonsMargin,
+        String[] customHeaders
     ) {
         table.setCellSelectionEnabled(true);
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -209,6 +216,9 @@ public class JTableUtils {
         DefaultTableModel tableModel = new DefaultTableModel(new String[] { "[0]" }, 1) {
             @Override
             public String getColumnName(int index) {
+                if (index < customHeaders.length) {
+                    return customHeaders[index];
+                }
                 return String.format("[%d]", index);
             }
         };
@@ -386,12 +396,25 @@ public class JTableUtils {
     public static void initJTableForArray(
         JTable table, int defaultColWidth,
         boolean showRowsIndexes, boolean showColsIndexes,
-        boolean changeRowsCountButtons, boolean changeColsCountButtons
+        boolean changeRowsCountButtons, boolean changeColsCountButtons,
+        String[] customHeaders
     ) {
         initJTableForArray(
             table, defaultColWidth,
             showRowsIndexes, showColsIndexes, changeRowsCountButtons, changeColsCountButtons,
-            22, DEFAULT_GAP
+            22, DEFAULT_GAP, customHeaders
+        );
+    }
+
+    public static void initJTableForArray(
+            JTable table, int defaultColWidth,
+            boolean showRowsIndexes, boolean showColsIndexes,
+            boolean changeRowsCountButtons, boolean changeColsCountButtons
+    ) {
+        initJTableForArray(
+                table, defaultColWidth,
+                showRowsIndexes, showColsIndexes, changeRowsCountButtons, changeColsCountButtons,
+                22, DEFAULT_GAP, new String[]{}
         );
     }
 
