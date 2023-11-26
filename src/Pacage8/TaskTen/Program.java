@@ -3,7 +3,10 @@ package Pacage8.TaskTen;
 import Pacage8.util.ArrayUtils;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+
+import static Pacage8.TaskTen.Task.courcesToString;
 
 
 public class Program {
@@ -64,7 +67,8 @@ public class Program {
             System.exit(2);
         }
         if (params.programExecution) {
-            String[][] answer = Task.execution(arr2);
+            var cources = Task.execution(Task.makeStudents(arr2), 3, 2);
+            String[][] answer = courcesToString(cources);
             if (params.outputFile == null) {
                 PrintStream out = System.out;
                 for (int i = 0; i < answer.length; i++) {

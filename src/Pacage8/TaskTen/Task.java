@@ -3,38 +3,34 @@ package Pacage8.TaskTen;
 import java.util.ArrayList;
 
 public class Task {
-    static int X;
-    static int N;
-
-    public static String[][] execution(String[][] arr2) {
-        ArrayList<InfoAboutStudents>[] courses = makeCourses(arr2);
+    public static ArrayList<Student>[] execution(ArrayList<Student> students, int x, int n) {
+        ArrayList<Student>[] courses = makeCourses(students);
         for (int i = 0; i < courses.length; i++) {
             courses[i] = sort(courses[i]);
-            expulsionOfStudents(courses[i]);
+            expulsionOfStudents(courses[i], x, n);
         }
-        String[][] answer = toString2(courses);
-        return answer;
+        return courses;
+
     }
 
-    public static ArrayList<InfoAboutStudents>[] makeCourses(String[][] arr2) {
-        ArrayList<InfoAboutStudents>[] courses = new ArrayList[4];
+    public static ArrayList<Student>[] makeCourses(ArrayList<Student> students) {
+        ArrayList<Student>[] courses = new ArrayList[4];
         for (int i = 0; i < courses.length; i++) {
             courses[i] = new ArrayList<>();
         }
-        X = Integer.parseInt(arr2[0][0]);
-        N = Integer.parseInt(arr2[0][1]);
-        for (int i = 1; i < arr2.length; i++) {
-            courses[Integer.parseInt(arr2[i][2]) - 1].add(new InfoAboutStudents(arr2[i]));
+
+        for (Student s : students) {
+            courses[s.course - 1].add(s);
         }
         return courses;
     }
 
-    public static ArrayList<InfoAboutStudents> sort(ArrayList<InfoAboutStudents> course) {
-        ArrayList<InfoAboutStudents> sortedCourse = new ArrayList<>();
+    public static ArrayList<Student> sort(ArrayList<Student> course) {
+        ArrayList<Student> sortedCourse = new ArrayList<>();
         int min = Integer.MAX_VALUE;
-        InfoAboutStudents newStudent = null;
+        Student newStudent = null;
         while (!course.isEmpty()) {
-            for (InfoAboutStudents student: course) {
+            for (Student student: course) {
                 if (student.averageScore < min) {
                     newStudent = student;
                     min = student.averageScore;
@@ -47,21 +43,21 @@ public class Task {
         return sortedCourse;
     }
 
-    public static void expulsionOfStudents(ArrayList<InfoAboutStudents> course) {
+    public static void expulsionOfStudents(ArrayList<Student> course, int x, int n) {
         if (course.isEmpty()) {
             return;
         }
         int count = 0;
         while (true) {
-            if (course.get(0).averageScore < X) {
+            if (course.get(0).averageScore < x) {
                 while (course.get(0 + count).averageScore == course.get(1 + count).averageScore) {
                     count++;
-                    if (course.size() <= N + count) {
+                    if (course.size() <= n + count) {
                         return;
                     }
                 }
                 count = 0;
-                if (course.size() <= N) {
+                if (course.size() <= n) {
                     return;
                 } else {
                     course.remove(0);
@@ -72,11 +68,20 @@ public class Task {
         }
     }
 
-    public static String[][] toString2(ArrayList<InfoAboutStudents>[] courses) {
+    public static ArrayList<Student> makeStudents(String[][] arrStudents) {
+        ArrayList<Student> students = new ArrayList<>();
+        for (int i = 1; i < arrStudents.length; i++) {
+            Student s = new Student(arrStudents[i]);
+            students.add(s);
+        }
+        return students;
+    }
+    
+    public static String[][] courcesToString(ArrayList<Student>[] courses) {
         ArrayList<String[]> list = new ArrayList<>();
         for (int i = 0; i < courses.length; i++) {
-            for (InfoAboutStudents student: courses[i]) {
-                list.add(new String[] {student.name, student.manOrGirl, String.valueOf(student.course), String.valueOf(student.averageScore)});
+            for (Student student: courses[i]) {
+                list.add(student.toStringArray());
             }
         }
 

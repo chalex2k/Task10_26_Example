@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Locale;
 
+import static Pacage8.TaskTen.Task.courcesToString;
+
 
 public class FrameMain extends JFrame {
     public static final String[] HEADERS = new String[]{"Фамилия", "Пол", "Курс", "Средний балл"};
@@ -30,7 +32,7 @@ public class FrameMain extends JFrame {
     private JButton buttonSaveOutputIntoFile;
     private JTable tableOutput;
     private JTextField textFieldX;
-    private JTextField textFieldY;
+    private JTextField textFieldN;
 
     private JFileChooser fileChooserOpen;
     private JFileChooser fileChooserSave;
@@ -157,7 +159,10 @@ public class FrameMain extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     String[][] matrix = JTableUtils.readStringMatrixFromJTable(tableInput);
-                    String[][] answer = Task.execution(matrix);
+                    int x = Integer.parseInt(textFieldX.getText());
+                    int n = Integer.parseInt(textFieldN.getText());
+                    var cources = Task.execution(Task.makeStudents(matrix), x, n);
+                    String[][] answer = courcesToString(cources);
                     JTableUtils.writeArrayToJTable(tableOutput, answer);
                 } catch (Exception e) {
                     SwingUtils.showErrorMessageBox(e);
@@ -224,9 +229,9 @@ public class FrameMain extends JFrame {
         final JLabel label2 = new JLabel();
         label2.setText("N =");
         panel2.add(label2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        textFieldY = new JTextField();
-        textFieldY.setText("2");
-        panel2.add(textFieldY, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        textFieldN = new JTextField();
+        textFieldN.setText("2");
+        panel2.add(textFieldN, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panelMain.add(panel3, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
